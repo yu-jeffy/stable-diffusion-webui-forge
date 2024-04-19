@@ -9,6 +9,7 @@ import re
 from modules import shared, errors, cache, scripts
 from modules.gitpython_hack import Repo
 from modules.paths_internal import extensions_dir, extensions_builtin_dir, script_path  # noqa: F401
+from modules_forge.config import always_disabled_extensions
 
 extensions: list[Extension] = []
 extension_paths: dict[str, Extension] = {}
@@ -257,7 +258,17 @@ def list_extensions():
                 continue
 
             is_builtin = dirname == extensions_builtin_dir
-            extension = Extension(name=extension_dirname, path=path, enabled=extension_dirname not in shared.opts.disabled_extensions, is_builtin=is_builtin, metadata=metadata)
+
+            disabled_extensions = shared.opts.disabled_extensions + always_disabled_extensions
+
+            extension = Extension(
+                name=extension_dirname,
+                path=path,
+                enabled=extension_dirname not in disabled_extensions,
+                is_builtin=is_builtin,
+                metadata=metadata
+            )
+
             extensions.append(extension)
             extension_paths[extension.path] = extension
             loaded_extensions[canonical_name] = extension

@@ -2,8 +2,10 @@ import argparse
 import json
 import os
 from modules.paths_internal import normalized_filepath, models_path, script_path, data_path, extensions_dir, extensions_builtin_dir, sd_default_config, sd_model_file  # noqa: F401
+from pathlib import Path
+from ldm_patched.modules import args_parser
 
-parser = argparse.ArgumentParser()
+parser = args_parser.parser
 
 parser.add_argument("-f", action='store_true', help=argparse.SUPPRESS)  # allows running as root; implemented outside of webui
 parser.add_argument("--update-all-extensions", action='store_true', help="launch.py argument: download updates for all extensions when starting the program")
@@ -121,7 +123,31 @@ parser.add_argument('--api-server-stop', action='store_true', help='enable serve
 parser.add_argument('--timeout-keep-alive', type=int, default=30, help='set timeout_keep_alive for uvicorn')
 parser.add_argument("--disable-all-extensions", action='store_true', help="prevent all extensions from running regardless of any other settings", default=False)
 parser.add_argument("--disable-extra-extensions", action='store_true', help="prevent all extensions except built-in from running regardless of any other settings", default=False)
+<<<<<<< HEAD
 parser.add_argument("--skip-load-model-at-start", action='store_true', help="if load a model at web start, only take effect when --nowebui")
 parser.add_argument("--unix-filenames-sanitization", action='store_true', help="allow any symbols except '/' in filenames. May conflict with your browser and file system")
 parser.add_argument("--filenames-max-length", type=int, default=128, help='maximal length of filenames of saved images. If you override it, it can conflict with your file system')
 parser.add_argument("--no-prompt-history", action='store_true', help="disable read prompt from last generation feature; settings this argument will not create '--data_path/params.txt' file")
+=======
+parser.add_argument("--skip-load-model-at-start", action='store_true', help="if load a model at web start, only take effect when --nowebui", )
+
+# Arguments added by forge.
+parser.add_argument(
+    '--forge-ref-a1111-home',
+    type=Path,
+    help="Look for models in an existing A1111 checkout's path",
+    default=None
+)
+parser.add_argument(
+    "--controlnet-dir",
+    type=Path,
+    help="Path to directory with ControlNet models",
+    default=None,
+)
+parser.add_argument(
+    "--controlnet-preprocessor-models-dir",
+    type=Path,
+    help="Path to directory with annotator model directories",
+    default=None,
+)
+>>>>>>> 29be1da7cf2b5dccfc70fbdd33eb35c56a31ffb7
